@@ -77,6 +77,7 @@ def make_text(chains, n):
     # makes a list of all keys in the dictionary 'chains'
     # random_keys is the "link"
     random_keys = chains.keys()
+    char_max = 140
 
     while True:
         # chooses a random key from the list of keys
@@ -94,14 +95,16 @@ def make_text(chains, n):
         if words[-1][-1] in ('?!.'):
             break
         # checks if the key is in the dictionary yet
-        if random_key not in chains:
-            break
+        # if random_key not in chains:
+        #     break
         # adds the next word randomly
         next_word = choice(chains[random_key])
 
         # checks if the word is None and ends the markov chain
-        if next_word is None:
-            words = words[:-1]
+        # also checks if adding the next word would exceed the char_max
+        if (next_word is None or
+            len(" ".join(words) + " " + next_word) > char_max):
+            # words = words[:-1]
             break
 
         # adds the next word to the markov chain
@@ -109,7 +112,7 @@ def make_text(chains, n):
 
         # rebinds the random key
         random_key = (random_key[1:] + (next_word,))
-        
+
     # returns the list of words split by a space
     return " ".join(words)
 
@@ -130,3 +133,4 @@ chains = make_chains(input_text, n)
 random_text = make_text(chains, n)
 
 print random_text
+print len(random_text)
